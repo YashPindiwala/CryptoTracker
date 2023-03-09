@@ -2,4 +2,26 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mobile_navigation" />
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/mainFragment">
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.project.app.cryptotracker.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.project.app.cryptotracker.FavoritesFragment"
+        android:label="fragment_favorites"
+        tools:layout="@layout/fragment_favorites" />
+    <fragment
+        android:id="@+id/educationFragment"
+        android:name="com.project.app.cryptotracker.EducationFragment"
+        android:label="fragment_education"
+        tools:layout="@layout/fragment_education" />
+    <fragment
+        android:id="@+id/investmentFragment"
+        android:name="com.project.app.cryptotracker.InvestmentFragment"
+        android:label="fragment_investment"
+        tools:layout="@layout/fragment_investment" />
+</navigation>
