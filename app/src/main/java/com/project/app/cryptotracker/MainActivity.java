@@ -41,7 +41,9 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
+                // Todo: adding more destination if fab requires to be shown on more fragment
                 if (navDestination.getId() == R.id.investmentFragment){
+                    fab.setImageResource(R.drawable.baseline_add_24);
                     fab.show();
                 } else {
                     fab.hide();
