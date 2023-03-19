@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 NavDestination currentFragment = navController.getCurrentDestination();
-
+                // Todo: add a check to perform specific task on specific fragment
             }
         });
 
