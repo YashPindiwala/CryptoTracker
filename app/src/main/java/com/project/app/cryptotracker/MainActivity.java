@@ -28,9 +28,8 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.hide();
-        fab.setOnClickListener(new View.OnClickListener() {
+        binding.fab.hide();
+        binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavDestination currentFragment = navController.getCurrentDestination();
@@ -43,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
             public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
                 // Todo: adding more destination if fab requires to be shown on more fragment
                 if (navDestination.getId() == R.id.investmentFragment){
-                    fab.setImageResource(R.drawable.baseline_add_24);
-                    fab.show();
+                    binding.fab.setImageResource(R.drawable.baseline_add_24);
+                    binding.fab.show();
                 } else {
-                    fab.hide();
+                    binding.fab.hide();
                 }
             }
         });
