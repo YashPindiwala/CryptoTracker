@@ -1,4 +1,4 @@
-package com.project.app.cryptotracker;
+package com.project.app.cryptotracker.Dashboard;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.project.app.cryptotracker.R;
 
 /**
  * A simple {@link Fragment} subclass.
