@@ -1,10 +1,14 @@
 package com.project.app.cryptotracker.POJO;
 
+import android.content.Context;
+
+import com.project.app.cryptotracker.API.APIRequestQueue;
+
 public class CoinListing {
     private String coinName;
     private String coinSymbol;
 
-    public CoinListing(String coinName, String coinSymbol) {
+    public CoinListing(String coinName, String coinSymbol, Context context) {
         this.coinName = coinName;
         this.coinSymbol = coinSymbol;
     }

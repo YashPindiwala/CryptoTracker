@@ -3,12 +3,19 @@ package com.project.app.cryptotracker.Dashboard;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.project.app.cryptotracker.API.CoinListingRequest;
+import com.project.app.cryptotracker.POJO.CoinListing;
 import com.project.app.cryptotracker.R;
+import com.project.app.cryptotracker.RecyclerAdapter.ListingAdapter;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +68,11 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        RecyclerView coinListingRecycler = view.findViewById(R.id.coinListingRecycler);
+        CoinListingRequest coinListingRequest = new CoinListingRequest(getContext(),coinListingRecycler);
+        coinListingRequest.requestListing();
+        coinListingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        return view;
     }
 }
