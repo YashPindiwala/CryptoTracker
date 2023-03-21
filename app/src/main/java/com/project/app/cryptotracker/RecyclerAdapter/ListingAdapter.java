@@ -1,5 +1,6 @@
 package com.project.app.cryptotracker.RecyclerAdapter;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,7 +14,8 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.CustomVi
     @NonNull
     @Override
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_layout_listing,parent,false);
+        return new CustomViewHolder(view);
     }
 
     @Override
