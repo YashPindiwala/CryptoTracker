@@ -27,6 +27,7 @@ public class CoinListingRequest {
     private static String NAME = "name";
     private static String SYMBOL = "symbol";
 
+    private static String ID = "id";
     private Context context;
     private RecyclerView recyclerView;
 
@@ -48,7 +49,9 @@ public class CoinListingRequest {
                             JSONArray data = response.getJSONArray("data");
                             for (int i = 0; i < data.length(); i++) {
                                 JSONObject coin = data.getJSONObject(i);
-                                coinListings.add(new CoinListing(coin.getString(NAME),coin.getString(SYMBOL),context));
+                                coinListings.add(new CoinListing(coin.getInt(ID),
+                                        coin.getString(NAME),
+                                        coin.getString(SYMBOL),context));
                             }
                             recyclerView.setAdapter(new ListingAdapter(context,coinListings));
                         } catch (JSONException e) {

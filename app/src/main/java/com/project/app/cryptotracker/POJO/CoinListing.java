@@ -2,13 +2,13 @@ package com.project.app.cryptotracker.POJO;
 
 import android.content.Context;
 
-import com.project.app.cryptotracker.API.APIRequestQueue;
-
 public class CoinListing {
     private String coinName;
     private String coinSymbol;
+    private int id;
 
-    public CoinListing(String coinName, String coinSymbol, Context context) {
+    public CoinListing(int id, String coinName, String coinSymbol, Context context) {
+        this.id = id;
         this.coinName = coinName;
         this.coinSymbol = coinSymbol;
     }
@@ -23,6 +23,14 @@ public class CoinListing {
 
     public String getCoinSymbol() {
         return coinSymbol;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setCoinSymbol(String coinSymbol) {

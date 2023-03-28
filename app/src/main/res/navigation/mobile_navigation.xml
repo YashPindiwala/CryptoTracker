@@ -8,7 +8,11 @@
         android:id="@+id/mainFragment"
         android:name="com.project.app.cryptotracker.Dashboard.MainFragment"
         android:label="@string/MainFragmentTitle"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.project.app.cryptotracker.Dashboard.FavoritesFragment"
@@ -24,4 +28,13 @@
         android:name="com.project.app.cryptotracker.Dashboard.InvestmentFragment"
         android:label="@string/InvestmentFragmentTitle"
         tools:layout="@layout/fragment_investment" />
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.project.app.cryptotracker.Dashboard.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" >
+        <action
+            android:id="@+id/action_detailFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
 </navigation>

@@ -1,16 +1,30 @@
 package com.project.app.cryptotracker.RecyclerAdapter;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.project.app.cryptotracker.API.APIRequestQueue;
+import com.project.app.cryptotracker.API.CoinDetailRequest;
 import com.project.app.cryptotracker.API.CoinListingRequest;
+import com.project.app.cryptotracker.Dashboard.DetailFragment;
 import com.project.app.cryptotracker.POJO.CoinListing;
+import com.project.app.cryptotracker.POJO.CryptoDetail;
 import com.project.app.cryptotracker.R;
 
 import java.util.ArrayList;
@@ -37,6 +51,14 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.CustomVi
         CoinListing coinListing = coinListings.get(position);
         holder.coinName.setText(coinListing.getCoinName());
         holder.coinSymbol.setText(coinListing.getCoinSymbol());
+        holder.itemView.setOnClickListener(v->{
+            int coinID = coinListing.getId();
+            Bundle bundle = new Bundle();
+            bundle.putInt("coinID", coinID);
+            Log.d("CoinID", "CoinID in ListingAdapter: " + coinID);
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_mainFragment_to_detailFragment, bundle);
+        });
     }
 
     @Override
@@ -51,6 +73,7 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.CustomVi
             super(itemView);
             this.coinName = itemView.findViewById(R.id.coinName);
             this.coinSymbol = itemView.findViewById(R.id.coinSymbol);
+            }
         }
     }
-}
+
