@@ -44,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
                 if (navDestination.getId() == R.id.investmentFragment){
                     binding.fab.setImageResource(R.drawable.baseline_add_24);
                     binding.fab.show();
+                } else if (navDestination.getId() == R.id.detailFragment) {
+                    binding.fab.setImageResource(R.drawable.baseline_favorite_24);
+                    binding.fab.show();
                 } else {
                     binding.fab.hide();
                 }
