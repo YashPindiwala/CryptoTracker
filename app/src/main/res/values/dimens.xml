@@ -6,4 +6,5 @@
     <dimen name="value24">24sp</dimen>
     <dimen name="cardRadius">14dp</dimen>
     <dimen name="cardElevation">5dp</dimen>
+    <dimen name="value18">18sp</dimen>
 </resources>

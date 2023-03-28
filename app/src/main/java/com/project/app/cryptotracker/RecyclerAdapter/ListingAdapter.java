@@ -51,6 +51,7 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.CustomVi
         CoinListing coinListing = coinListings.get(position);
         holder.coinName.setText(coinListing.getCoinName());
         holder.coinSymbol.setText(coinListing.getCoinSymbol());
+        holder.percentChange.setText(String.format("%.2f",coinListing.getPercentChange()) + "%");
         holder.itemView.setOnClickListener(v->{
             int coinID = coinListing.getId();
             Bundle bundle = new Bundle();
@@ -69,10 +70,12 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.CustomVi
     class CustomViewHolder extends RecyclerView.ViewHolder{
         protected TextView coinName;
         protected TextView coinSymbol;
+        protected TextView percentChange;
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
             this.coinName = itemView.findViewById(R.id.coinName);
             this.coinSymbol = itemView.findViewById(R.id.coinSymbol);
+            this.percentChange = itemView.findViewById(R.id.percentChange);
             }
         }
     }

@@ -51,7 +51,9 @@ public class CoinListingRequest {
                                 JSONObject coin = data.getJSONObject(i);
                                 coinListings.add(new CoinListing(coin.getInt(ID),
                                         coin.getString(NAME),
-                                        coin.getString(SYMBOL),context));
+                                        coin.getString(SYMBOL),
+                                        coin.getJSONObject("quote").getJSONObject("USD").getDouble("percent_change_24h"),
+                                        context));
                             }
                             recyclerView.setAdapter(new ListingAdapter(context,coinListings));
                         } catch (JSONException e) {

@@ -6,11 +6,13 @@ public class CoinListing {
     private String coinName;
     private String coinSymbol;
     private int id;
+    private double percentChange;
 
-    public CoinListing(int id, String coinName, String coinSymbol, Context context) {
+    public CoinListing(int id, String coinName, String coinSymbol, double percentChange, Context context) {
         this.id = id;
         this.coinName = coinName;
         this.coinSymbol = coinSymbol;
+        this.percentChange = percentChange;
     }
 
     public String getCoinName() {
@@ -35,5 +37,13 @@ public class CoinListing {
 
     public void setCoinSymbol(String coinSymbol) {
         this.coinSymbol = coinSymbol;
+    }
+
+    public double getPercentChange() {
+        return percentChange;
+    }
+
+    public void setPercentChange(double percentChange) {
+        this.percentChange = percentChange;
     }
 }
