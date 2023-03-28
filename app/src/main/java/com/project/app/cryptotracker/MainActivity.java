@@ -38,9 +38,10 @@ public class MainActivity extends AppCompatActivity {
                 NavDestination currentFragment = navController.getCurrentDestination();
                 // Todo: add a check to perform specific task on specific fragment
                 if (currentFragment.getId() == R.id.detailFragment){
-                    if (DetailFragment.fav != null){
-                        new CryptoDatabase(getApplicationContext()).addToFavorite(DetailFragment.fav);
+                    if (DetailFragment.fav != null && new CryptoDatabase(getApplicationContext()).addToFavorite(DetailFragment.fav)){
                         Snackbar.make(v,DetailFragment.fav.getName() + " Added to Favorites", Snackbar.LENGTH_LONG).show();
+                    } else {
+                        Snackbar.make(v,DetailFragment.fav.getName() + " is already Added to Favorites", Snackbar.LENGTH_LONG).show();
                     }
                 }
             }

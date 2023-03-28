@@ -2,6 +2,7 @@ package com.project.app.cryptotracker.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -40,13 +41,19 @@ public class CryptoDatabase extends SQLiteOpenHelper {
 
     }
 
-    public void addToFavorite(CryptoDetail fav){
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+    public boolean addToFavorite(CryptoDetail fav){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT "+ FAVORITE_COLUMN_COIN_NAME + " FROM " + FAVORITE_TABLE + " WHERE " + FAVORITE_COLUMN_COIN_NAME + " = ?",new String[]{fav.getName()});
+        if (cursor.moveToFirst()){
+            return false;
+        }
+        sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(FAVORITE_COLUMN_COIN_NAME,fav.getName());
         contentValues.put(FAVORITE_COLUMN_COIN_SYMBOL,fav.getSymbol());
         contentValues.put(FAVORITE_COLUMN_COIN_LOGO,fav.getLogo());
         sqLiteDatabase.insert(FAVORITE_TABLE,null,contentValues);
         sqLiteDatabase.close();
+        return true;
     }
 }
