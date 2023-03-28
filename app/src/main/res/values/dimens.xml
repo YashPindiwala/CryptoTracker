@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="value24">24sp</dimen>
+    <dimen name="cardRadius">14dp</dimen>
+    <dimen name="cardElevation">5dp</dimen>
 </resources>
