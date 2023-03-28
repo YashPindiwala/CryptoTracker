@@ -35,6 +35,8 @@ import java.util.List;
  */
 public class DetailFragment extends Fragment {
 
+    public static CryptoDetail fav = null;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -106,6 +108,12 @@ public class DetailFragment extends Fragment {
                 String dateLaunched = coinData.getString("date_launched");
                 String category = coinData.getString("category");
 
+                CryptoDetail cryptoDetail = new CryptoDetail();
+                cryptoDetail.setName(coinName);
+                cryptoDetail.setSymbol(coinSymbol);
+                cryptoDetail.setLogo(coinLogoUrl);
+
+                fav = cryptoDetail;
 
                 // Update UI elements
                 tvCoinName.setText(coinName);
