@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 
 import com.project.app.cryptotracker.POJO.CryptoDetail;
 
+import java.util.ArrayList;
+
 public class CryptoDatabase extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "cryptowallet";
     public static final int DATABASE_VERSION = 1;
@@ -55,5 +57,22 @@ public class CryptoDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.insert(FAVORITE_TABLE,null,contentValues);
         sqLiteDatabase.close();
         return true;
+    }
+    public ArrayList<CryptoDetail> getAllFavCoin(){
+        ArrayList<CryptoDetail> cryptoDetails = new ArrayList<>();
+
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + FAVORITE_TABLE,null);
+        while (cursor.moveToNext()){
+            CryptoDetail cryptoDetail = new CryptoDetail();
+            cryptoDetail.setId(cursor.getInt(0));
+            cryptoDetail.setName(cursor.getString(1));
+            cryptoDetail.setSymbol(cursor.getString(2));
+            cryptoDetail.setLogo(cursor.getString(3));
+            cryptoDetails.add(
+                    cryptoDetail
+            );
+        }
+        return cryptoDetails;
     }
 }
