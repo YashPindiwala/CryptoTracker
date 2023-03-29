@@ -60,7 +60,6 @@ public class CryptoDatabase extends SQLiteOpenHelper {
     }
     public ArrayList<CryptoDetail> getAllFavCoin(){
         ArrayList<CryptoDetail> cryptoDetails = new ArrayList<>();
-
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + FAVORITE_TABLE,null);
         while (cursor.moveToNext()){
@@ -73,6 +72,17 @@ public class CryptoDatabase extends SQLiteOpenHelper {
                     cryptoDetail
             );
         }
+        sqLiteDatabase.close();
         return cryptoDetails;
+    }
+
+    public boolean removeFavCoin(int id){
+        SQLiteDatabase database = this.getWritableDatabase();
+        int status = database.delete(FAVORITE_TABLE,FAVORITE_COLUMN_COIN_ID + "= ?",new String[]{String.valueOf(id)});
+        database.close();
+        if (status == 1)
+            return true;
+        else
+            return false;
     }
 }
