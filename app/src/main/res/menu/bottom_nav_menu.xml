@@ -12,7 +12,7 @@
         android:title="@string/FavoriteFragmentTitle" />
 
     <item
-        android:id="@+id/educationFragment"
+        android:id="@+id/nav_viewPagerHost"
         android:icon="@drawable/baseline_info_24"
         android:title="@string/EducationFragmentTitle" />
 
