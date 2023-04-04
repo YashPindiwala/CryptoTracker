@@ -35,14 +35,5 @@
             android:paddingTop="16dp"
             android:textSize="16sp"
             tools:text="Description here..." />
-
-        <LinearLayout
-            android:id="@+id/links_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="16dp">
-            <!-- Dynamically add link MaterialButtons here -->
-        </LinearLayout>
     </LinearLayout>
 </ScrollView>
