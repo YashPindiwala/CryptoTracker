@@ -1,6 +1,8 @@
 package com.project.app.cryptotracker.API;
 
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +12,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.project.app.cryptotracker.Database.CryptoDatabase;
 import com.project.app.cryptotracker.POJO.CoinListing;
 import com.project.app.cryptotracker.RecyclerAdapter.ListingAdapter;
 
@@ -49,13 +52,16 @@ public class CoinListingRequest {
                             JSONArray data = response.getJSONArray("data");
                             for (int i = 0; i < data.length(); i++) {
                                 JSONObject coin = data.getJSONObject(i);
+                                JSONObject quote = coin.getJSONObject("quote");
+                                JSONObject USD = quote.getJSONObject("USD");
                                 coinListings.add(new CoinListing(coin.getInt(ID),
                                         coin.getString(NAME),
                                         coin.getString(SYMBOL),
-                                        coin.getJSONObject("quote").getJSONObject("USD").getDouble("percent_change_24h"),
-                                        context));
+                                        USD.getDouble("percent_change_24h"),
+                                        USD.getDouble("price")));
                             }
                             recyclerView.setAdapter(new ListingAdapter(context,coinListings));
+                            new CryptoDatabase(context).addAllCoin(coinListings);
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }

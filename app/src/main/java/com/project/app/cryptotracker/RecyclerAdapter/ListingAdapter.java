@@ -23,6 +23,7 @@ import com.project.app.cryptotracker.API.APIRequestQueue;
 import com.project.app.cryptotracker.API.CoinDetailRequest;
 import com.project.app.cryptotracker.API.CoinListingRequest;
 import com.project.app.cryptotracker.Dashboard.DetailFragment;
+import com.project.app.cryptotracker.Database.CryptoDatabase;
 import com.project.app.cryptotracker.POJO.CoinListing;
 import com.project.app.cryptotracker.POJO.CryptoDetail;
 import com.project.app.cryptotracker.R;
@@ -49,11 +50,12 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.CustomVi
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         CoinListing coinListing = coinListings.get(position);
+        new CryptoDatabase(context).addToCoin(coinListing);
         holder.coinName.setText(coinListing.getCoinName());
         holder.coinSymbol.setText(coinListing.getCoinSymbol());
         holder.percentChange.setText(String.format("%.2f",coinListing.getPercentChange()) + "%");
         holder.itemView.setOnClickListener(v->{
-            int coinID = coinListing.getId();
+            int coinID = coinListing.getCoinId();
             Bundle bundle = new Bundle();
             bundle.putInt("coinID", coinID);
             Log.d("CoinID", "CoinID in ListingAdapter: " + coinID);
