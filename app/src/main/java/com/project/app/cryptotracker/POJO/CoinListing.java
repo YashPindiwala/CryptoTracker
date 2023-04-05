@@ -6,13 +6,39 @@ public class CoinListing {
     private String coinName;
     private String coinSymbol;
     private int id;
+    private int coinId;
     private double percentChange;
+    private double price;
+    private String lastUpdate;
 
-    public CoinListing(int id, String coinName, String coinSymbol, double percentChange, Context context) {
-        this.id = id;
+    public CoinListing(){
+
+    }
+
+    public CoinListing(int coinId, String coinName, String coinSymbol, double percentChange, double price) {
+        this.coinId = coinId;
         this.coinName = coinName;
         this.coinSymbol = coinSymbol;
         this.percentChange = percentChange;
+        this.price = price;
+        this.lastUpdate = lastUpdate;
+    }
+
+    public CoinListing(int coinId, String coinName, String coinSymbol, double percentChange, double price, String lastUpdate) {
+        this.coinId = coinId;
+        this.coinName = coinName;
+        this.coinSymbol = coinSymbol;
+        this.percentChange = percentChange;
+        this.price = price;
+        this.lastUpdate = lastUpdate;
+    }
+
+    public int getCoinId() {
+        return coinId;
+    }
+
+    public void setCoinId(int coinId) {
+        this.coinId = coinId;
     }
 
     public String getCoinName() {
@@ -45,5 +71,21 @@ public class CoinListing {
 
     public void setPercentChange(double percentChange) {
         this.percentChange = percentChange;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(String lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

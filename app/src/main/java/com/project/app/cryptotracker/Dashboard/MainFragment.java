@@ -9,13 +9,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.project.app.cryptotracker.API.CoinListingRequest;
+import com.project.app.cryptotracker.Database.CryptoDatabase;
 import com.project.app.cryptotracker.POJO.CoinListing;
 import com.project.app.cryptotracker.R;
 import com.project.app.cryptotracker.RecyclerAdapter.ListingAdapter;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,8 +77,15 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         RecyclerView coinListingRecycler = view.findViewById(R.id.coinListingRecycler);
         CoinListingRequest coinListingRequest = new CoinListingRequest(getContext(),coinListingRecycler);
-        coinListingRequest.requestListing();
-        coinListingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        CryptoDatabase cryptoDatabase = new CryptoDatabase(getContext());
+        CoinListing coin = cryptoDatabase.getFirstCoin();
+        if (coin == null){
+            coinListingRequest.requestListing();
+            coinListingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        } else {
+            coinListingRecycler.setAdapter(new ListingAdapter(getContext(),cryptoDatabase.getAlCoin()));
+            coinListingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
         return view;
     }
 }
