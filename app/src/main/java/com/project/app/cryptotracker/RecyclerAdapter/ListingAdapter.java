@@ -38,7 +38,6 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.CustomVi
     public ListingAdapter(Context context, ArrayList<CoinListing> coinListings) {
         this.context = context;
         this.coinListings = coinListings;
-        Toast.makeText(context,coinListings.size() + "",Toast.LENGTH_LONG).show();
     }
 
     @NonNull
