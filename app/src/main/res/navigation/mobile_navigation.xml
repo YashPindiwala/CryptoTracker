@@ -35,6 +35,12 @@
         tools:layout="@layout/fragment_detail" >
         <action
             android:id="@+id/action_detailFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mainFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_viewPagerHost"
+        android:name="com.project.app.cryptotracker.ViewPager.EducationViewPagerHost"
+        android:label="Crypto Education"
+        tools:layout="@layout/fragment_education_view_pager" />
 </navigation>
