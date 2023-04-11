@@ -88,13 +88,14 @@ public class MainFragment extends Fragment {
             coinListingRecycler.setAdapter(new ListingAdapter(getContext(),cryptoDatabase.getAlCoin()));
             coinListingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         }
+        //refreshing the Recycler view when user pulls down
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            synchronized public void onRefresh() {
+             public void onRefresh() {
                 cryptoDatabase.truncateCoinTable();
+                coinListingRequest.setSwipeRefreshLayout(swipeRefreshLayout);
                 coinListingRequest.requestListing();
                 coinListingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-                swipeRefreshLayout.setRefreshing(false);
             }
         });
         return view;

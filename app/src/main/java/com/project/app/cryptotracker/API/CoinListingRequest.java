@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -34,6 +35,7 @@ public class CoinListingRequest {
     private Context context;
     private RecyclerView recyclerView;
     private ArrayList<CoinListing> coinListings;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public CoinListingRequest(Context context, RecyclerView recyclerView) {
         this.context = context;
@@ -41,7 +43,7 @@ public class CoinListingRequest {
         coinListings = new ArrayList<>();
     }
 
-    public void requestListing(){
+    synchronized public void requestListing(){
 
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
@@ -89,5 +91,15 @@ public class CoinListingRequest {
 
     public void saveToDb(){
         new CryptoDatabase(context).addAllCoin(coinListings);
+        hideRefresh();
     }
+
+    public void setSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout){
+        this.swipeRefreshLayout = swipeRefreshLayout;
+    }
+    public void hideRefresh(){
+        if (swipeRefreshLayout != null)
+            swipeRefreshLayout.setRefreshing(false);
+    }
+
 }
