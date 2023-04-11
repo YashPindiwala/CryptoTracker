@@ -3,6 +3,7 @@ package com.project.app.cryptotracker.Dashboard;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -82,6 +83,8 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_detail, container, false);
         int coinId = getArguments().getInt("coinID");
+        
+
         // Find UI elements
         TextView tvCoinName = view.findViewById(R.id.name);
         TextView tvCoinSymbol = view.findViewById(R.id.symbol);
