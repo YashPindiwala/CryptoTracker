@@ -81,6 +81,7 @@ public class MainFragment extends Fragment {
         CoinListing coin = cryptoDatabase.getFirstCoin();
         if (coin == null){
             coinListingRequest.requestListing();
+            coinListingRequest.saveToDb();
             coinListingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         } else {
             coinListingRecycler.setAdapter(new ListingAdapter(getContext(),cryptoDatabase.getAlCoin()));

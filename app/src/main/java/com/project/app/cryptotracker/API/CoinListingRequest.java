@@ -33,14 +33,16 @@ public class CoinListingRequest {
     private static String ID = "id";
     private Context context;
     private RecyclerView recyclerView;
+    private ArrayList<CoinListing> coinListings;
 
     public CoinListingRequest(Context context, RecyclerView recyclerView) {
         this.context = context;
         this.recyclerView = recyclerView;
+        coinListings = new ArrayList<>();
     }
 
     public void requestListing(){
-        ArrayList<CoinListing> coinListings = new ArrayList<>();
+
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -61,7 +63,6 @@ public class CoinListingRequest {
                                         USD.getDouble("price")));
                             }
                             recyclerView.setAdapter(new ListingAdapter(context,coinListings));
-                            new CryptoDatabase(context).addAllCoin(coinListings);
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -83,5 +84,9 @@ public class CoinListingRequest {
             }
         };
         APIRequestQueue.getInstance(context).getRequestQueue().add(request);
+    }
+
+    public void saveToDb(){
+        new CryptoDatabase(context).addAllCoin(coinListings);
     }
 }
