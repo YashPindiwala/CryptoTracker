@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,17 +77,26 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         RecyclerView coinListingRecycler = view.findViewById(R.id.coinListingRecycler);
+        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.refreshLayout);
         CoinListingRequest coinListingRequest = new CoinListingRequest(getContext(),coinListingRecycler);
         CryptoDatabase cryptoDatabase = new CryptoDatabase(getContext());
         CoinListing coin = cryptoDatabase.getFirstCoin();
         if (coin == null){
             coinListingRequest.requestListing();
-            coinListingRequest.saveToDb();
             coinListingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         } else {
             coinListingRecycler.setAdapter(new ListingAdapter(getContext(),cryptoDatabase.getAlCoin()));
             coinListingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         }
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            synchronized public void onRefresh() {
+                cryptoDatabase.truncateCoinTable();
+                coinListingRequest.requestListing();
+                coinListingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         return view;
     }
 }

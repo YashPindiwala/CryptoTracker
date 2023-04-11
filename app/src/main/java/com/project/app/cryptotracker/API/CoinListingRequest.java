@@ -62,6 +62,7 @@ public class CoinListingRequest {
                                         USD.getDouble("percent_change_24h"),
                                         USD.getDouble("price")));
                             }
+                            saveToDb();
                             recyclerView.setAdapter(new ListingAdapter(context,coinListings));
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
