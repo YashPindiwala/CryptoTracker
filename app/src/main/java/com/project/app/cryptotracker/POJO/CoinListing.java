@@ -8,11 +8,16 @@ public class CoinListing {
     private int id;
     private double percentChange;
 
-    public CoinListing(int id, String coinName, String coinSymbol, double percentChange, Context context) {
+    private double price;
+
+
+
+    public CoinListing(int id, String coinName, String coinSymbol, double percentChange,double price, Context context) {
         this.id = id;
         this.coinName = coinName;
         this.coinSymbol = coinSymbol;
         this.percentChange = percentChange;
+        this.price = price;
     }
 
     public String getCoinName() {
@@ -45,5 +50,18 @@ public class CoinListing {
 
     public void setPercentChange(double percentChange) {
         this.percentChange = percentChange;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return this.coinName;
     }
 }

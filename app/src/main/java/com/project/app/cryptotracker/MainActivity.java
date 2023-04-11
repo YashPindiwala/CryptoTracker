@@ -1,12 +1,19 @@
 package com.project.app.cryptotracker;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -14,11 +21,18 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.project.app.cryptotracker.API.CoinListingRequest;
 import com.project.app.cryptotracker.Dashboard.DetailFragment;
 import com.project.app.cryptotracker.Database.CryptoDatabase;
+import com.project.app.cryptotracker.POJO.CoinListing;
 import com.project.app.cryptotracker.databinding.ActivityMainBinding;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Snackbar.make(v,DetailFragment.fav.getName() + " is already Added to Favorites", Snackbar.LENGTH_LONG).show();
                     }
+                } else{
+                    showCryptoFormDialog();
                 }
             }
         });
@@ -73,6 +89,71 @@ public class MainActivity extends AppCompatActivity {
 
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+    }
+
+    //method to show the dialog form
+    private void showCryptoFormDialog(){
+        Log.d("MainActivity", "showCryptoFormDialog hit");
+        CoinListingRequest request = new CoinListingRequest(this, coinListings -> {
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
+            LayoutInflater inflater = MainActivity.this.getLayoutInflater();
+            View view = inflater.inflate(R.layout.crypto_form, null);
+            builder.setView(view);
+
+            MaterialAutoCompleteTextView dropdown = view.findViewById(R.id.crypto_dropdown);
+            TextInputLayout textInputLayout = view.findViewById(R.id.crypto_til);
+            ArrayAdapter<CoinListing> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, coinListings);
+            dropdown.setAdapter(adapter);
+
+            dropdown.setOnItemClickListener((parent, view1, position, id) -> {
+                CoinListing selectedCoin = adapter.getItem(position);
+
+                TextView name = view.findViewById(R.id.crypto_name);
+                TextView symbol = view.findViewById(R.id.crypto_symbol);
+                TextView currentPrice = view.findViewById(R.id.crypto_current_price);
+                TextInputEditText buyPrice = view.findViewById(R.id.crypto_buy_price);
+
+                if (selectedCoin != null) {
+                    name.setText(selectedCoin.getCoinName());
+                    symbol.setText(selectedCoin.getCoinSymbol());
+                    currentPrice.setText(String.valueOf(selectedCoin.getPrice()));
+                }
+            });
+
+            builder.setTitle("Select a cryptocurrency")
+                    .setPositiveButton("Save", (dialog, id) -> {
+
+                        String selectedText = dropdown.getText().toString();
+                        CoinListing selectedCoin = null;
+
+                        for (CoinListing coin : coinListings) {
+                            if (coin.getCoinName().equals(selectedText)) {
+                                selectedCoin = coin;
+                                break;
+                            }
+                        }
+
+                        if (selectedCoin != null) {
+                            // Use the selectedCoin object for further processing
+                        } else {
+                            // Handle the case when no coin is selected or the entered text does not match any coin
+                        }
+
+                        TextInputEditText buyPriceInput = view.findViewById(R.id.crypto_buy_price);
+                                    double buyPrice = Double.parseDouble(buyPriceInput.getText().toString());
+
+                                    // SAVE TO DB HERE
+
+                                    Log.d("CryptoForm", "Selected coin: " + selectedCoin.getCoinName() + " - Buy price: " + buyPrice);
+                                })
+                                .setNegativeButton("Cancel", (dialog, id) -> {
+                                    dialog.dismiss();
+                                });
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+                    });
+    request.requestListingForDropDown();
+
     }
 
 }
