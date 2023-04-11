@@ -91,7 +91,7 @@ public class CryptoDatabase extends SQLiteOpenHelper {
     }
 
     public boolean addToCoin(CoinListing coin){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COIN_COLUMN_COINID, coin.getCoinId());
@@ -106,7 +106,7 @@ public class CryptoDatabase extends SQLiteOpenHelper {
     }
 
     public boolean addAllCoin(ArrayList<CoinListing> coins){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         for (CoinListing coin:
              coins) {

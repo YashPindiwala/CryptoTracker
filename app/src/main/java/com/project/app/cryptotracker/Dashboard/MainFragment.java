@@ -36,6 +36,8 @@ public class MainFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private static final int REFRESH_TIME = 20;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -92,10 +94,23 @@ public class MainFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
              public void onRefresh() {
-                cryptoDatabase.truncateCoinTable();
-                coinListingRequest.setSwipeRefreshLayout(swipeRefreshLayout);
-                coinListingRequest.requestListing();
-                coinListingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    Date lastDate = simpleDateFormat.parse(coin.getLastUpdate());
+                    Date currentDate = new Date();
+                    currentDate.setTime(System.currentTimeMillis() - (REFRESH_TIME * 60000));
+                    if (lastDate.before(currentDate)){
+                        cryptoDatabase.truncateCoinTable();
+                        coinListingRequest.setSwipeRefreshLayout(swipeRefreshLayout);
+                        coinListingRequest.requestListing();
+                        coinListingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+                        Toast.makeText(getContext(),"Refreshing...",Toast.LENGTH_LONG).show();
+                    } else {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         return view;
