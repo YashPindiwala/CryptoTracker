@@ -9,7 +9,7 @@
     <string name="FavoriteFragmentTitle">Favorite</string>
     <string name="EducationFragmentTitle">Education</string>
     <string name="InvestmentFragmentTitle">Investment</string>
-    <string name="yourInvestmentString">Your Investment</string>
+    <string name="yourInvestmentString">Investment</string>
     <string name="marketString">Market</string>
     <string name="differenceString">Difference</string>
 </resources>
