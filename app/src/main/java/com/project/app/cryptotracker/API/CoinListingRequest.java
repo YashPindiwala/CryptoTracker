@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -35,6 +36,8 @@ public class CoinListingRequest {
     private static String ID = "id";
     private Context context;
     private RecyclerView recyclerView;
+    private ArrayList<CoinListing> coinListings;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     //used callback for resuability
     public interface CoinListingCallback {
@@ -51,10 +54,11 @@ public class CoinListingRequest {
     public CoinListingRequest(Context context, RecyclerView recyclerView) {
         this.context = context;
         this.recyclerView = recyclerView;
+        coinListings = new ArrayList<>();
     }
 
-    public void requestListing(){
-        ArrayList<CoinListing> coinListings = new ArrayList<>();
+    synchronized public void requestListing(){
+
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -66,13 +70,6 @@ public class CoinListingRequest {
                             JSONArray data = response.getJSONArray("data");
                             for (int i = 0; i < data.length(); i++) {
                                 JSONObject coin = data.getJSONObject(i);
-                                double price = coin.getJSONObject("quote").getJSONObject("USD").getDouble("price");
-                                coinListings.add(new CoinListing(coin.getInt(ID),
-                                        coin.getString(NAME),
-                                        coin.getString(SYMBOL),
-                                        coin.getJSONObject("quote").getJSONObject("USD").getDouble("percent_change_24h"),
-                                        price,
-                                        context));
                                 JSONObject quote = coin.getJSONObject("quote");
                                 JSONObject USD = quote.getJSONObject("USD");
                                 coinListings.add(new CoinListing(coin.getInt(ID),
@@ -81,8 +78,8 @@ public class CoinListingRequest {
                                         USD.getDouble("percent_change_24h"),
                                         USD.getDouble("price")));
                             }
+                            saveToDb();
                             recyclerView.setAdapter(new ListingAdapter(context,coinListings));
-                            new CryptoDatabase(context).addAllCoin(coinListings);
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -119,14 +116,13 @@ public class CoinListingRequest {
                             JSONArray data = response.getJSONArray("data");
                             for (int i = 0; i < data.length(); i++) {
                                 JSONObject coin = data.getJSONObject(i);
-                                double price = coin.getJSONObject("quote").getJSONObject("USD").getDouble("price");
-
+                                JSONObject quote = coin.getJSONObject("quote");
+                                JSONObject USD = quote.getJSONObject("USD");
                                 coinListings.add(new CoinListing(coin.getInt(ID),
                                         coin.getString(NAME),
                                         coin.getString(SYMBOL),
-                                        coin.getJSONObject("quote").getJSONObject("USD").getDouble("percent_change_24h"),
-                                        price,
-                                        context));
+                                        USD.getDouble("percent_change_24h"),
+                                        USD.getDouble("price")));
                             }
                             callback.onCoinListingsFetched(coinListings);
                         } catch (JSONException e) {
@@ -152,5 +148,17 @@ public class CoinListingRequest {
         };
         APIRequestQueue.getInstance(context).getRequestQueue().add(request);
     }
+    public void saveToDb(){
+        new CryptoDatabase(context).addAllCoin(coinListings);
+        hideRefresh();
+    }
 
+    public void setSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout){
+        this.swipeRefreshLayout = swipeRefreshLayout;
+    }
+    public void hideRefresh(){
+        if (swipeRefreshLayout != null)
+            swipeRefreshLayout.setRefreshing(false);
+
+    }
 }
