@@ -31,6 +31,8 @@ import com.project.app.cryptotracker.Database.CryptoDatabase;
 import com.project.app.cryptotracker.POJO.CoinListing;
 import com.project.app.cryptotracker.databinding.ActivityMainBinding;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Snackbar.make(v,DetailFragment.fav.getName() + " is already Added to Favorites", Snackbar.LENGTH_LONG).show();
                     }
-                } else{
+                } else if (currentFragment.getId() == R.id.investmentFragment){
                     showCryptoFormDialog();
                 }
             }
@@ -90,8 +92,8 @@ public class MainActivity extends AppCompatActivity {
 
     //method to show the dialog form
     private void showCryptoFormDialog(){
+        ArrayList<CoinListing> coinListings = new CryptoDatabase(getApplicationContext()).getAlCoin();
         Log.d("MainActivity", "showCryptoFormDialog hit");
-        CoinListingRequest request = new CoinListingRequest(this, coinListings -> {
             // Adding material 3 dialog
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
             LayoutInflater inflater = MainActivity.this.getLayoutInflater();
@@ -160,8 +162,6 @@ public class MainActivity extends AppCompatActivity {
                         // Show the dialog as an alert
                         AlertDialog alertDialog = builder.create();
                         alertDialog.show();
-                    });
-    request.requestListingForDropDown();
 
     }
 
