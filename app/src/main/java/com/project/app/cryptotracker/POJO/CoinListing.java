@@ -24,12 +24,11 @@ public class CoinListing {
 
     public CoinListing(int coinId, String coinName, String coinSymbol, double percentChange, double price) {
         this.coinId = coinId;
-
         this.coinName = coinName;
         this.coinSymbol = coinSymbol;
         this.percentChange = percentChange;
         this.price = price;
-        this.lastUpdate = lastUpdate;
+//        this.lastUpdate = lastUpdate;
     }
 
     public CoinListing(int coinId, String coinName, String coinSymbol, double percentChange, double price, String lastUpdate) {

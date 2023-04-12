@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import com.project.app.cryptotracker.POJO.CoinInvestment;
 import com.project.app.cryptotracker.POJO.CoinListing;
 import com.project.app.cryptotracker.POJO.CryptoDetail;
 
@@ -37,6 +38,14 @@ public class CryptoDatabase extends SQLiteOpenHelper {
     public static final String COIN_COLUMN_COIN_CHANGE = "coin_change";
     public static final String COIN_COLUMN_COIN_LAST_UPDATE = "last_update";
 
+    /*Investment Table*/
+    public static final String INVESTMENT_TABLE = "investment";
+    public static final String INVESTMENT_COLUMN_ID = "id";
+    public static final String INVESTMENT_COLUMN_COIN_ID = "coin_id"; // will reference to the coins table -> id
+    public static final String INVESTMENT_COLUMN_SYMBOL = "investment_coin_symbol";
+    public static final String INVESTMENT_COLUMN_PRICE = "investment_coin_price";
+    public static final String INVESTMENT_COLUMN_QNTY = "investment_coin_qnty";
+
 
     /*CREATE tables*/
     public static final String CREATE_COIN_TABLE = "CREATE TABLE " +
@@ -53,8 +62,16 @@ public class CryptoDatabase extends SQLiteOpenHelper {
             + FAVORITE_COLUMN_COIN_NAME + " TEXT,"
             + FAVORITE_COLUMN_COIN_SYMBOL + " TEXT,"
             + FAVORITE_COLUMN_COIN_LOGO + " TEXT,"
-            + FAVORITE_COLUMN_FAV_COIN_ID + " INTEGER,"
-            + "FOREIGN KEY("+ FAVORITE_COLUMN_FAV_COIN_ID +") REFERENCES "+ COIN_TABLE+"("+ COIN_COLUMN_COIN_ID +"))";
+            + FAVORITE_COLUMN_FAV_COIN_ID + " INTEGER)";
+
+    public static final String CREATE_INVESTMENT_TABLE = "CREATE TABLE " +
+            INVESTMENT_TABLE + "("
+            + INVESTMENT_COLUMN_ID + " INTEGER PRIMARY KEY,"
+            + INVESTMENT_COLUMN_COIN_ID + " INTEGER,"
+            + INVESTMENT_COLUMN_SYMBOL + " TEXT,"
+            + INVESTMENT_COLUMN_PRICE + " INTEGER,"
+            + INVESTMENT_COLUMN_QNTY + " INTEGER,"
+            + "FOREIGN KEY (" + INVESTMENT_COLUMN_COIN_ID + ") REFERENCES "+ COIN_TABLE + "("+ COIN_COLUMN_COINID +"))";
 
     public CryptoDatabase(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -64,6 +81,7 @@ public class CryptoDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_COIN_TABLE);
         db.execSQL(CREATE_FAVORITE_TABLE);
+        db.execSQL(CREATE_INVESTMENT_TABLE);
     }
 
     @Override
@@ -183,5 +201,32 @@ public class CryptoDatabase extends SQLiteOpenHelper {
             return true;
         else
             return false;
+    }
+
+    public boolean addToInvestment(CoinInvestment coinInvestment){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(INVESTMENT_COLUMN_COIN_ID, coinInvestment.getCoinId());
+        contentValues.put(INVESTMENT_COLUMN_SYMBOL, coinInvestment.getCoinSymbol());
+        contentValues.put(INVESTMENT_COLUMN_PRICE, coinInvestment.getPrice());
+        contentValues.put(INVESTMENT_COLUMN_QNTY, coinInvestment.getQnty());
+        sqLiteDatabase.insert(INVESTMENT_TABLE,null,contentValues);
+        sqLiteDatabase.close();
+        return true;
+    }
+
+    public ArrayList<CoinInvestment> getAllInvestment(){
+        ArrayList<CoinInvestment> coinInvestments = new ArrayList<>();
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT i."+INVESTMENT_COLUMN_COIN_ID+",i."+INVESTMENT_COLUMN_SYMBOL+",i."+INVESTMENT_COLUMN_PRICE+",i."+INVESTMENT_COLUMN_QNTY+",c."+COIN_COLUMN_COIN_PRICE+" FROM " + INVESTMENT_TABLE + " AS i," + COIN_TABLE + " AS c WHERE i." + INVESTMENT_COLUMN_COIN_ID + "= c." +COIN_COLUMN_COIN_ID,null);
+        while (cursor.moveToNext()){
+            CoinInvestment coinInvestment = new CoinInvestment(
+                    cursor.getInt(0),cursor.getString(1),cursor.getDouble(2),cursor.getDouble(3)
+            );
+            coinInvestment.setMarket(cursor.getDouble(4));
+            coinInvestments.add(coinInvestment);
+        }
+        sqLiteDatabase.close();
+        return coinInvestments;
     }
 }

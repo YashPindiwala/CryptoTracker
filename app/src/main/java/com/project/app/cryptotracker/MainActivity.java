@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
 
@@ -28,6 +30,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.project.app.cryptotracker.API.CoinListingRequest;
 import com.project.app.cryptotracker.Dashboard.DetailFragment;
 import com.project.app.cryptotracker.Database.CryptoDatabase;
+import com.project.app.cryptotracker.POJO.CoinInvestment;
 import com.project.app.cryptotracker.POJO.CoinListing;
 import com.project.app.cryptotracker.databinding.ActivityMainBinding;
 
@@ -50,13 +53,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 NavDestination currentFragment = navController.getCurrentDestination();
                 // Todo: add a check to perform specific task on specific fragment
-                if (currentFragment.getId() == R.id.detailFragment){
-                    if (DetailFragment.fav != null && new CryptoDatabase(getApplicationContext()).addToFavorite(DetailFragment.fav)){
-                        Snackbar.make(v,DetailFragment.fav.getName() + " Added to Favorites", Snackbar.LENGTH_LONG).show();
+                if (currentFragment.getId() == R.id.detailFragment) {
+                    if (DetailFragment.fav != null && new CryptoDatabase(getApplicationContext()).addToFavorite(DetailFragment.fav)) {
+                        Snackbar.make(v, DetailFragment.fav.getName() + " Added to Favorites", Snackbar.LENGTH_LONG).show();
                     } else {
-                        Snackbar.make(v,DetailFragment.fav.getName() + " is already Added to Favorites", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(v, DetailFragment.fav.getName() + " is already Added to Favorites", Snackbar.LENGTH_LONG).show();
                     }
-                } else if (currentFragment.getId() == R.id.investmentFragment){
+                } else if (currentFragment.getId() == R.id.investmentFragment) {
                     showCryptoFormDialog();
                 }
             }
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDestinationChanged(@NonNull NavController navController, @NonNull NavDestination navDestination, @Nullable Bundle bundle) {
                 // Todo: adding more destination if fab requires to be shown on more fragment
-                if (navDestination.getId() == R.id.investmentFragment){
+                if (navDestination.getId() == R.id.investmentFragment) {
                     binding.fab.setImageResource(R.drawable.baseline_add_24);
                     binding.fab.show();
                 } else if (navDestination.getId() == R.id.detailFragment) {
@@ -91,77 +94,82 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //method to show the dialog form
-    private void showCryptoFormDialog(){
+    private void showCryptoFormDialog() {
         ArrayList<CoinListing> coinListings = new CryptoDatabase(getApplicationContext()).getAlCoin();
         Log.d("MainActivity", "showCryptoFormDialog hit");
-            // Adding material 3 dialog
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
-            LayoutInflater inflater = MainActivity.this.getLayoutInflater();
-            View view = inflater.inflate(R.layout.crypto_form, null);
-            builder.setView(view);
+        // Adding material 3 dialog
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
+        LayoutInflater inflater = MainActivity.this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.crypto_form, null);
+        builder.setView(view);
 
-            //Dropdown and adding the API array to the drop down
-            MaterialAutoCompleteTextView dropdown = view.findViewById(R.id.crypto_dropdown);
-            TextInputLayout textInputLayout = view.findViewById(R.id.crypto_til);
-            ArrayAdapter<CoinListing> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, coinListings);
-            dropdown.setAdapter(adapter);
+        //Dropdown and adding the API array to the drop down
+        MaterialAutoCompleteTextView dropdown = view.findViewById(R.id.crypto_dropdown);
+        TextInputLayout textInputLayout = view.findViewById(R.id.crypto_til);
+        ArrayAdapter<CoinListing> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, coinListings);
+        dropdown.setAdapter(adapter);
 
-            dropdown.setOnItemClickListener((parent, view1, position, id) -> {
-                CoinListing selectedCoin = adapter.getItem(position);
+        dropdown.setOnItemClickListener((parent, view1, position, id) -> {
+            CoinListing selectedCoin = adapter.getItem(position);
 
-                TextView name = view.findViewById(R.id.crypto_name);
-                TextView symbol = view.findViewById(R.id.crypto_symbol);
-                TextView currentPrice = view.findViewById(R.id.crypto_current_price);
-                TextInputEditText buyPrice = view.findViewById(R.id.crypto_buy_price);
+            TextView name = view.findViewById(R.id.crypto_name);
+            TextView symbol = view.findViewById(R.id.crypto_symbol);
+            TextView currentPrice = view.findViewById(R.id.crypto_current_price);
+            TextInputEditText buyPrice = view.findViewById(R.id.crypto_buy_price);
 
-                if (selectedCoin != null) {
-                    name.setText(selectedCoin.getCoinName());
-                    symbol.setText(selectedCoin.getCoinSymbol());
-                    currentPrice.setText(String.valueOf(selectedCoin.getPrice()));
-                    buyPrice.setText(String.valueOf(selectedCoin.getPrice()));
-                }
-            });
+            if (selectedCoin != null) {
+                name.setText(selectedCoin.getCoinName());
+                symbol.setText(selectedCoin.getCoinSymbol());
+                currentPrice.setText(String.valueOf(selectedCoin.getPrice()));
+                buyPrice.setText(String.valueOf(selectedCoin.getPrice()));
+            }
+        });
 
-            builder.setTitle("Select a cryptocurrency")
-                    .setPositiveButton("Save", (dialog, id) -> {
+        builder.setTitle("Select a cryptocurrency")
+                .setPositiveButton("Save", (dialog, id) -> {
 
-                        String selectedText = dropdown.getText().toString();
-                        CoinListing selectedCoin = null;
+                    String selectedText = dropdown.getText().toString();
+                    CoinListing selectedCoin = null;
 
-                        for (CoinListing coin : coinListings) {
-                            if (coin.getCoinName().equals(selectedText)) {
-                                selectedCoin = coin;
-                                break;
-                            }
+                    for (CoinListing coin : coinListings) {
+                        if (coin.getCoinName().equals(selectedText)) {
+                            selectedCoin = coin;
+                            break;
                         }
+                    }
 
-                        if (selectedCoin != null) {
-                            // COIN IF USER SELECTS FROM LIST
-                        } else {
-                            // INSERT TOAST HERE
-                        }
+                    if (selectedCoin != null) {
+                        // COIN IF USER SELECTS FROM LIST
+                    } else {
+                        // INSERT TOAST HERE
+                    }
 
-                        TextInputEditText buyPriceInput = view.findViewById(R.id.crypto_buy_price);
-                        TextInputEditText quantityInput = view.findViewById(R.id.crypto_buy_quantity);
-                        double quantity = Double.parseDouble(quantityInput.getText().toString());
-                        double buyPrice = Double.parseDouble(buyPriceInput.getText().toString());
+                    TextInputEditText buyPriceInput = view.findViewById(R.id.crypto_buy_price);
+                    TextInputEditText quantityInput = view.findViewById(R.id.crypto_buy_quantity);
+                    double quantity = Double.parseDouble(quantityInput.getText().toString());
+                    double buyPrice = Double.parseDouble(buyPriceInput.getText().toString());
 
-                        // SAVE TO DB FOR USER TOTAL
-                        double userTotal = quantity * buyPrice;
-                        System.out.println(userTotal);
+                    // SAVE TO DB FOR USER TOTAL
+                    double userTotal = quantity * buyPrice;
+                    System.out.println(userTotal);
+
+//                    Toast.makeText(getApplicationContext(), "Buyprice: " + buyPrice + "Qnty: " + quantity + "Coin: " + selectedCoin, Toast.LENGTH_LONG).show();
 
 
-                                    // SAVE TO DB HERE
+                    // SAVE TO DB HERE
 
-                                    Log.d("CryptoForm", "Selected coin: " + selectedCoin.getCoinName() + " - Buy price: " + buyPrice);
-                                })
-                                .setNegativeButton("Cancel", (dialog, id) -> {
-                                    dialog.dismiss();
-                                });
+                    Log.d("CryptoForm", "Selected coin: " + selectedCoin.getCoinName() + " - Buy price: " + buyPrice);
+                    new CryptoDatabase(getApplicationContext()).addToInvestment(new CoinInvestment(
+                            selectedCoin.getId(),selectedCoin.getCoinSymbol(),buyPrice,quantity
+                    ));
+                })
+                .setNegativeButton("Cancel", (dialog, id) -> {
+                    dialog.dismiss();
+                });
 
-                        // Show the dialog as an alert
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
+        // Show the dialog as an alert
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
 
     }
 
