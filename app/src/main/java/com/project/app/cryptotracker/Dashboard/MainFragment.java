@@ -96,6 +96,11 @@ public class MainFragment extends Fragment {
              public void onRefresh() {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 try {
+                    CoinListing coin = cryptoDatabase.getFirstCoin();
+                    if (coin == null){
+                        swipeRefreshLayout.setRefreshing(false);
+                        return;
+                    }
                     Date lastDate = simpleDateFormat.parse(coin.getLastUpdate());
                     Date currentDate = new Date();
                     currentDate.setTime(System.currentTimeMillis() - (REFRESH_TIME * 60000));
