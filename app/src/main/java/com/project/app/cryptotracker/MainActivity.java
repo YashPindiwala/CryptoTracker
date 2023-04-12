@@ -22,7 +22,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -31,8 +30,6 @@ import com.project.app.cryptotracker.Dashboard.DetailFragment;
 import com.project.app.cryptotracker.Database.CryptoDatabase;
 import com.project.app.cryptotracker.POJO.CoinListing;
 import com.project.app.cryptotracker.databinding.ActivityMainBinding;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -95,11 +92,13 @@ public class MainActivity extends AppCompatActivity {
     private void showCryptoFormDialog(){
         Log.d("MainActivity", "showCryptoFormDialog hit");
         CoinListingRequest request = new CoinListingRequest(this, coinListings -> {
+            // Adding material 3 dialog
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(MainActivity.this);
             LayoutInflater inflater = MainActivity.this.getLayoutInflater();
             View view = inflater.inflate(R.layout.crypto_form, null);
             builder.setView(view);
 
+            //Dropdown and adding the API array to the drop down
             MaterialAutoCompleteTextView dropdown = view.findViewById(R.id.crypto_dropdown);
             TextInputLayout textInputLayout = view.findViewById(R.id.crypto_til);
             ArrayAdapter<CoinListing> adapter = new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1, coinListings);
@@ -117,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                     name.setText(selectedCoin.getCoinName());
                     symbol.setText(selectedCoin.getCoinSymbol());
                     currentPrice.setText(String.valueOf(selectedCoin.getPrice()));
+                    buyPrice.setText(String.valueOf(selectedCoin.getPrice()));
                 }
             });
 
@@ -134,13 +134,20 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         if (selectedCoin != null) {
-                            // Use the selectedCoin object for further processing
+                            // COIN IF USER SELECTS FROM LIST
                         } else {
-                            // Handle the case when no coin is selected or the entered text does not match any coin
+                            // INSERT TOAST HERE
                         }
 
                         TextInputEditText buyPriceInput = view.findViewById(R.id.crypto_buy_price);
-                                    double buyPrice = Double.parseDouble(buyPriceInput.getText().toString());
+                        TextInputEditText quantityInput = view.findViewById(R.id.crypto_buy_quantity);
+                        double quantity = Double.parseDouble(quantityInput.getText().toString());
+                        double buyPrice = Double.parseDouble(buyPriceInput.getText().toString());
+
+                        // SAVE TO DB FOR USER TOTAL
+                        double userTotal = quantity * buyPrice;
+                        System.out.println(userTotal);
+
 
                                     // SAVE TO DB HERE
 
@@ -149,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
                                 .setNegativeButton("Cancel", (dialog, id) -> {
                                     dialog.dismiss();
                                 });
+
+                        // Show the dialog as an alert
                         AlertDialog alertDialog = builder.create();
                         alertDialog.show();
                     });

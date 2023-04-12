@@ -34,6 +34,7 @@ public class CoinListingRequest {
     private Context context;
     private RecyclerView recyclerView;
 
+    //used callback for resuability
     public interface CoinListingCallback {
         void onCoinListingsFetched(ArrayList<CoinListing> coinListings);
     }
