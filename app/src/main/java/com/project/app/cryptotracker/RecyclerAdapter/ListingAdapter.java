@@ -50,7 +50,6 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingAdapter.CustomVi
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         CoinListing coinListing = coinListings.get(position);
-        new CryptoDatabase(context).addToCoin(coinListing);
         holder.coinName.setText(coinListing.getCoinName());
         holder.coinSymbol.setText(coinListing.getCoinSymbol());
         holder.percentChange.setText(String.format("%.2f",coinListing.getPercentChange()) + "%");

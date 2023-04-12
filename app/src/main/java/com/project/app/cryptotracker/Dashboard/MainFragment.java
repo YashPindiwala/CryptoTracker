@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,8 @@ public class MainFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private static final int REFRESH_TIME = 20;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -76,6 +79,7 @@ public class MainFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         RecyclerView coinListingRecycler = view.findViewById(R.id.coinListingRecycler);
+        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.refreshLayout);
         CoinListingRequest coinListingRequest = new CoinListingRequest(getContext(),coinListingRecycler);
         CryptoDatabase cryptoDatabase = new CryptoDatabase(getContext());
         CoinListing coin = cryptoDatabase.getFirstCoin();
@@ -86,6 +90,29 @@ public class MainFragment extends Fragment {
             coinListingRecycler.setAdapter(new ListingAdapter(getContext(),cryptoDatabase.getAlCoin()));
             coinListingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         }
+        //refreshing the Recycler view when user pulls down
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+             public void onRefresh() {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                try {
+                    Date lastDate = simpleDateFormat.parse(coin.getLastUpdate());
+                    Date currentDate = new Date();
+                    currentDate.setTime(System.currentTimeMillis() - (REFRESH_TIME * 60000));
+                    if (lastDate.before(currentDate)){
+                        cryptoDatabase.truncateCoinTable();
+                        coinListingRequest.setSwipeRefreshLayout(swipeRefreshLayout);
+                        coinListingRequest.requestListing();
+                        coinListingRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+                        Toast.makeText(getContext(),"Refreshing...",Toast.LENGTH_LONG).show();
+                    } else {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
         return view;
     }
 }

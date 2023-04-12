@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -33,14 +34,17 @@ public class CoinListingRequest {
     private static String ID = "id";
     private Context context;
     private RecyclerView recyclerView;
+    private ArrayList<CoinListing> coinListings;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public CoinListingRequest(Context context, RecyclerView recyclerView) {
         this.context = context;
         this.recyclerView = recyclerView;
+        coinListings = new ArrayList<>();
     }
 
-    public void requestListing(){
-        ArrayList<CoinListing> coinListings = new ArrayList<>();
+    synchronized public void requestListing(){
+
         JsonObjectRequest request = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -60,8 +64,8 @@ public class CoinListingRequest {
                                         USD.getDouble("percent_change_24h"),
                                         USD.getDouble("price")));
                             }
+                            saveToDb();
                             recyclerView.setAdapter(new ListingAdapter(context,coinListings));
-                            new CryptoDatabase(context).addAllCoin(coinListings);
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -84,4 +88,18 @@ public class CoinListingRequest {
         };
         APIRequestQueue.getInstance(context).getRequestQueue().add(request);
     }
+
+    public void saveToDb(){
+        new CryptoDatabase(context).addAllCoin(coinListings);
+        hideRefresh();
+    }
+
+    public void setSwipeRefreshLayout(SwipeRefreshLayout swipeRefreshLayout){
+        this.swipeRefreshLayout = swipeRefreshLayout;
+    }
+    public void hideRefresh(){
+        if (swipeRefreshLayout != null)
+            swipeRefreshLayout.setRefreshing(false);
+    }
+
 }
