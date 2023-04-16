@@ -62,4 +62,9 @@ public class InvestmentAdapter extends RecyclerView.Adapter<InvestmentAdapter.Cu
             quantity = itemView.findViewById(R.id.coinQuantity);
         }
     }
+
+    public void notifyInsert(){
+        coinInvestments = new CryptoDatabase(context).getAllInvestment();
+        notifyItemInserted(coinInvestments.size());
+    }
 }
