@@ -218,15 +218,25 @@ public class CryptoDatabase extends SQLiteOpenHelper {
     public ArrayList<CoinInvestment> getAllInvestment(){
         ArrayList<CoinInvestment> coinInvestments = new ArrayList<>();
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT i."+INVESTMENT_COLUMN_COIN_ID+",i."+INVESTMENT_COLUMN_SYMBOL+",i."+INVESTMENT_COLUMN_PRICE+",i."+INVESTMENT_COLUMN_QNTY+",c."+COIN_COLUMN_COIN_PRICE+" FROM " + INVESTMENT_TABLE + " AS i," + COIN_TABLE + " AS c WHERE i." + INVESTMENT_COLUMN_COIN_ID + "= c." +COIN_COLUMN_COIN_ID,null);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT i."+INVESTMENT_COLUMN_ID+",i."+INVESTMENT_COLUMN_COIN_ID+",i."+INVESTMENT_COLUMN_SYMBOL+",i."+INVESTMENT_COLUMN_PRICE+",i."+INVESTMENT_COLUMN_QNTY+",c."+COIN_COLUMN_COIN_PRICE+" FROM " + INVESTMENT_TABLE + " AS i," + COIN_TABLE + " AS c WHERE i." + INVESTMENT_COLUMN_COIN_ID + "= c." +COIN_COLUMN_COIN_ID,null);
         while (cursor.moveToNext()){
             CoinInvestment coinInvestment = new CoinInvestment(
-                    cursor.getInt(0),cursor.getString(1),cursor.getDouble(2),cursor.getDouble(3)
+                    cursor.getInt(1),cursor.getString(2),cursor.getDouble(3),cursor.getDouble(4)
             );
-            coinInvestment.setMarket(cursor.getDouble(4));
+            coinInvestment.setId(cursor.getInt(0));
+            coinInvestment.setMarket(cursor.getDouble(5));
             coinInvestments.add(coinInvestment);
         }
         sqLiteDatabase.close();
         return coinInvestments;
+    }
+    public boolean removeInvestment(int id){
+        SQLiteDatabase database = this.getWritableDatabase();
+        int status = database.delete(INVESTMENT_TABLE,INVESTMENT_COLUMN_ID + "= ?",new String[]{String.valueOf(id)});
+        database.close();
+        if (status == 1)
+            return true;
+        else
+            return false;
     }
 }
