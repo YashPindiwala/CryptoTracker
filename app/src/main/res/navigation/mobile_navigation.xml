@@ -43,4 +43,8 @@
         android:name="com.project.app.cryptotracker.ViewPager.EducationViewPagerHost"
         android:label="Crypto Education"
         tools:layout="@layout/fragment_education_view_pager" />
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.project.app.cryptotracker.Dashboard.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>
