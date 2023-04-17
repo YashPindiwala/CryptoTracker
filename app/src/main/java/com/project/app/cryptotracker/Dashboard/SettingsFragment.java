@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.project.app.cryptotracker.Database.CryptoDatabase;
 import com.project.app.cryptotracker.R;
 
@@ -20,7 +21,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Preference clearDatabasePreference = findPreference("clear_database");
         if (clearDatabasePreference != null) {
             clearDatabasePreference.setOnPreferenceClickListener(preference -> {
-                new AlertDialog.Builder(requireContext())
+                new MaterialAlertDialogBuilder(requireContext())
                         .setTitle("Clear Database")
                         .setMessage("Are you sure you want to delete all data from the database?")
                         .setPositiveButton("Yes", (dialog, which) -> {
