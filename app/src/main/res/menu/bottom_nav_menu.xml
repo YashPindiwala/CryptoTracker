@@ -12,7 +12,7 @@
         android:title="@string/FavoriteFragmentTitle" />
 
     <item
-        android:id="@+id/educationFragment"
+        android:id="@+id/nav_viewPagerHost"
         android:icon="@drawable/baseline_info_24"
         android:title="@string/EducationFragmentTitle" />
 
@@ -20,5 +20,9 @@
         android:id="@+id/investmentFragment"
         android:icon="@drawable/baseline_money_24"
         android:title="@string/InvestmentFragmentTitle" />
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="Settings"/>
 
 </menu>

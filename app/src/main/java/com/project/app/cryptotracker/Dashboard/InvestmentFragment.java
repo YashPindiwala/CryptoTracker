@@ -1,30 +1,40 @@
-package com.project.app.cryptotracker;
+package com.project.app.cryptotracker.Dashboard;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.project.app.cryptotracker.Database.CryptoDatabase;
+import com.project.app.cryptotracker.R;
+import com.project.app.cryptotracker.RecyclerAdapter.InvestmentAdapter;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MainFragment#newInstance} factory method to
+ * Use the {@link InvestmentFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MainFragment extends Fragment {
+public class InvestmentFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    public static RecyclerView investmentRecycler;
+
+    public static InvestmentAdapter investmentAdapter;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    public MainFragment() {
+    public InvestmentFragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +44,11 @@ public class MainFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
+     * @return A new instance of fragment InvestmentFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MainFragment newInstance(String param1, String param2) {
-        MainFragment fragment = new MainFragment();
+    public static InvestmentFragment newInstance(String param1, String param2) {
+        InvestmentFragment fragment = new InvestmentFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,6 +69,11 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_investment, container, false);
+        investmentRecycler = view.findViewById(R.id.investmentRecycler);
+        investmentAdapter = new InvestmentAdapter(getContext());
+        investmentRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        investmentRecycler.setAdapter(investmentAdapter);
+        return view;
     }
 }

@@ -6,22 +6,45 @@
     app:startDestination="@id/mainFragment">
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.project.app.cryptotracker.MainFragment"
+        android:name="com.project.app.cryptotracker.Dashboard.MainFragment"
         android:label="@string/MainFragmentTitle"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.project.app.cryptotracker.FavoritesFragment"
+        android:name="com.project.app.cryptotracker.Dashboard.FavoritesFragment"
         android:label="@string/FavoriteFragmentTitle"
         tools:layout="@layout/fragment_favorites" />
     <fragment
         android:id="@+id/educationFragment"
-        android:name="com.project.app.cryptotracker.EducationFragment"
+        android:name="com.project.app.cryptotracker.Dashboard.EducationFragment"
         android:label="@string/EducationFragmentTitle"
         tools:layout="@layout/fragment_education" />
     <fragment
         android:id="@+id/investmentFragment"
-        android:name="com.project.app.cryptotracker.InvestmentFragment"
+        android:name="com.project.app.cryptotracker.Dashboard.InvestmentFragment"
         android:label="@string/InvestmentFragmentTitle"
         tools:layout="@layout/fragment_investment" />
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.project.app.cryptotracker.Dashboard.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" >
+        <action
+            android:id="@+id/action_detailFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_viewPagerHost"
+        android:name="com.project.app.cryptotracker.ViewPager.EducationViewPagerHost"
+        android:label="Crypto Education"
+        tools:layout="@layout/fragment_education_view_pager" />
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.project.app.cryptotracker.Dashboard.SettingsFragment"
+        android:label="@string/SettingFragmentTitle" />
 </navigation>
