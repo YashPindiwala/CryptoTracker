@@ -167,21 +167,6 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),"There was an error adding your investments.",Toast.LENGTH_LONG).show();
                         }
                     }
-
-//                    if (selectedCoin != null) {
-//                        // COIN IF USER SELECTS FROM LIST
-//                    } else {
-//                        // INSERT TOAST HERE
-//                    }
-
-                    // SAVE TO DB FOR USER TOTAL
-//                    double userTotal = quantity * buyPrice;
-//                    System.out.println(userTotal);
-
-//                    Toast.makeText(getApplicationContext(), "Buyprice: " + buyPrice + "Qnty: " + quantity + "Coin: " + selectedCoin, Toast.LENGTH_LONG).show();
-
-
-                    // SAVE TO DB HERE
                 })
                 .setNegativeButton("Cancel", (dialog, id) -> {
                     dialog.dismiss();

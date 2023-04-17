@@ -40,9 +40,10 @@ public class InvestmentAdapter extends RecyclerView.Adapter<InvestmentAdapter.Cu
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         CoinInvestment coinInvestment = coinInvestments.get(position);
         double investment = coinInvestment.getQnty() * coinInvestment.getPrice();
+        double differenceValue = coinInvestment.getMarket() * coinInvestment.getQnty();
         holder.coinSymbol.setText(coinInvestment.getCoinSymbol());
         holder.investment.setText(String.format("%.2f",investment));
-        holder.difference.setText(String.format("%.2f",Math.abs(investment-coinInvestment.getMarket())/coinInvestment.getQnty()));
+        holder.difference.setText(String.format("%.2f",Math.abs(investment-differenceValue)));
         holder.market.setText(String.format("%.2f",coinInvestment.getMarket()));
         holder.quantity.setText(String.valueOf(coinInvestment.getQnty()));
     }
