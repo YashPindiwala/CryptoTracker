@@ -4,12 +4,12 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="MainFragmentTitle">Main</string>
     <string name="FavoriteFragmentTitle">Favorite</string>
     <string name="EducationFragmentTitle">Education</string>
     <string name="InvestmentFragmentTitle">Investment</string>
     <string name="yourInvestmentString">Investment</string>
+    <string name="SettingFragmentTitle">Settings</string>
     <string name="marketString">Market</string>
     <string name="differenceString">Difference</string>
     <!-- Preference Titles -->
@@ -36,8 +36,5 @@
         <string name="alternative_layout_summary">Toggle to use an alternative layout for the app</string>
         <string name="currency_settings">Currency Settings</string>
         <string name="currency_title">Select Currency</string>
-
-
-
 
 </resources>
