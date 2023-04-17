@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 
 
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 name.setText(selectedCoin.getCoinName());
                 symbol.setText(selectedCoin.getCoinSymbol());
                 currentPrice.setText(String.valueOf(selectedCoin.getPrice()));
-                buyPrice.setText(String.valueOf(selectedCoin.getPrice()));
+                buyPrice.setText("");
             }
         });
 
@@ -139,16 +140,35 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
+                    double quantity = 0.0;
+                    double buyPrice = 0.0;
+                    TextInputEditText buyPriceInput = view.findViewById(R.id.crypto_buy_price);
+                    TextInputEditText quantityInput = view.findViewById(R.id.crypto_buy_quantity);
+                    if (quantityInput.getText().equals("") || buyPriceInput.getText().equals("") || selectedCoin == null){
+                        Toast.makeText(getApplicationContext(),"All fields are Required!",Toast.LENGTH_LONG).show();
+                    } else {
+                        try {
+                            quantity = Double.parseDouble(quantityInput.getText().toString());
+                            buyPrice = Double.parseDouble(buyPriceInput.getText().toString());
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        boolean status = new CryptoDatabase(getApplicationContext()).addToInvestment(new CoinInvestment(
+                                selectedCoin.getId(),selectedCoin.getCoinSymbol(),buyPrice,quantity
+                        ));
+                        if (status){
+                            Toast.makeText(getApplicationContext(),"Successfully added to your Investments.",Toast.LENGTH_LONG).show();
+                            InvestmentFragment.investmentAdapter.notifyInsert(); // this will refresh the recyclerview
+                        } else {
+                            Toast.makeText(getApplicationContext(),"There was an error adding your investments.",Toast.LENGTH_LONG).show();
+                        }
+                    }
+
 //                    if (selectedCoin != null) {
 //                        // COIN IF USER SELECTS FROM LIST
 //                    } else {
 //                        // INSERT TOAST HERE
 //                    }
-
-                    TextInputEditText buyPriceInput = view.findViewById(R.id.crypto_buy_price);
-                    TextInputEditText quantityInput = view.findViewById(R.id.crypto_buy_quantity);
-                    double quantity = Double.parseDouble(quantityInput.getText().toString());
-                    double buyPrice = Double.parseDouble(buyPriceInput.getText().toString());
 
                     // SAVE TO DB FOR USER TOTAL
 //                    double userTotal = quantity * buyPrice;
@@ -158,17 +178,6 @@ public class MainActivity extends AppCompatActivity {
 
 
                     // SAVE TO DB HERE
-
-                    Log.d("CryptoForm", "Selected coin: " + selectedCoin.getCoinName() + " - Buy price: " + buyPrice);
-                    boolean status = new CryptoDatabase(getApplicationContext()).addToInvestment(new CoinInvestment(
-                            selectedCoin.getId(),selectedCoin.getCoinSymbol(),buyPrice,quantity
-                    ));
-                    if (status){
-                        Toast.makeText(getApplicationContext(),"Successfully added to your Investments.",Toast.LENGTH_LONG).show();
-                        InvestmentFragment.investmentAdapter.notifyInsert(); // this will refresh the recyclerview
-                    } else {
-                        Toast.makeText(getApplicationContext(),"There was an error adding your investments.",Toast.LENGTH_LONG).show();
-                    }
                 })
                 .setNegativeButton("Cancel", (dialog, id) -> {
                     dialog.dismiss();
