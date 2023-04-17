@@ -26,6 +26,10 @@ public class InvestmentFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    public static RecyclerView investmentRecycler;
+
+    public static InvestmentAdapter investmentAdapter;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -66,9 +70,10 @@ public class InvestmentFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_investment, container, false);
-        RecyclerView investmentRecycler = view.findViewById(R.id.investmentRecycler);
+        investmentRecycler = view.findViewById(R.id.investmentRecycler);
+        investmentAdapter = new InvestmentAdapter(getContext());
         investmentRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        investmentRecycler.setAdapter(new InvestmentAdapter(getContext()));
+        investmentRecycler.setAdapter(investmentAdapter);
         return view;
     }
 }

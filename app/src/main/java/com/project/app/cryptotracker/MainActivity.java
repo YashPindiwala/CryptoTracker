@@ -29,6 +29,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.project.app.cryptotracker.API.CoinListingRequest;
 import com.project.app.cryptotracker.Dashboard.DetailFragment;
+import com.project.app.cryptotracker.Dashboard.InvestmentFragment;
 import com.project.app.cryptotracker.Database.CryptoDatabase;
 import com.project.app.cryptotracker.POJO.CoinInvestment;
 import com.project.app.cryptotracker.POJO.CoinListing;
@@ -138,11 +139,11 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
-                    if (selectedCoin != null) {
-                        // COIN IF USER SELECTS FROM LIST
-                    } else {
-                        // INSERT TOAST HERE
-                    }
+//                    if (selectedCoin != null) {
+//                        // COIN IF USER SELECTS FROM LIST
+//                    } else {
+//                        // INSERT TOAST HERE
+//                    }
 
                     TextInputEditText buyPriceInput = view.findViewById(R.id.crypto_buy_price);
                     TextInputEditText quantityInput = view.findViewById(R.id.crypto_buy_quantity);
@@ -150,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
                     double buyPrice = Double.parseDouble(buyPriceInput.getText().toString());
 
                     // SAVE TO DB FOR USER TOTAL
-                    double userTotal = quantity * buyPrice;
-                    System.out.println(userTotal);
+//                    double userTotal = quantity * buyPrice;
+//                    System.out.println(userTotal);
 
 //                    Toast.makeText(getApplicationContext(), "Buyprice: " + buyPrice + "Qnty: " + quantity + "Coin: " + selectedCoin, Toast.LENGTH_LONG).show();
 
@@ -159,9 +160,15 @@ public class MainActivity extends AppCompatActivity {
                     // SAVE TO DB HERE
 
                     Log.d("CryptoForm", "Selected coin: " + selectedCoin.getCoinName() + " - Buy price: " + buyPrice);
-                    new CryptoDatabase(getApplicationContext()).addToInvestment(new CoinInvestment(
+                    boolean status = new CryptoDatabase(getApplicationContext()).addToInvestment(new CoinInvestment(
                             selectedCoin.getId(),selectedCoin.getCoinSymbol(),buyPrice,quantity
                     ));
+                    if (status){
+                        Toast.makeText(getApplicationContext(),"Successfully added to your Investments.",Toast.LENGTH_LONG).show();
+                        InvestmentFragment.investmentAdapter.notifyInsert(); // this will refresh the recyclerview
+                    } else {
+                        Toast.makeText(getApplicationContext(),"There was an error adding your investments.",Toast.LENGTH_LONG).show();
+                    }
                 })
                 .setNegativeButton("Cancel", (dialog, id) -> {
                     dialog.dismiss();
