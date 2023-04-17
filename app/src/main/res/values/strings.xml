@@ -33,7 +33,7 @@
         <string name="clear_database_summary">Delete all data from the database</string>
         <string name="layout_settings">Layout Settings</string>
         <string name="alternative_layout_title">Use Alternative Layout</string>
-        <string name="alternative_layout_summary">Toggle to use an alternative layout for the app</string>
+        <string name="alternative_layout_summary">Toggle to use an alternative layout for the Detail Page</string>
         <string name="currency_settings">Currency Settings</string>
         <string name="currency_title">Select Currency</string>
 

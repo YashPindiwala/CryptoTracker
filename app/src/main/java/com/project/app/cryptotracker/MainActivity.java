@@ -56,10 +56,14 @@ public class MainActivity extends AppCompatActivity {
                 NavDestination currentFragment = navController.getCurrentDestination();
                 // Todo: add a check to perform specific task on specific fragment
                 if (currentFragment.getId() == R.id.detailFragment) {
-                    if (DetailFragment.fav != null && new CryptoDatabase(getApplicationContext()).addToFavorite(DetailFragment.fav)) {
-                        Snackbar.make(v, DetailFragment.fav.getName() + " Added to Favorites", Snackbar.LENGTH_LONG).show();
+                    if (DetailFragment.fav != null){
+                        if (new CryptoDatabase(getApplicationContext()).addToFavorite(DetailFragment.fav)) {
+                            Snackbar.make(v, DetailFragment.fav.getName() + " Added to Favorites", Snackbar.LENGTH_LONG).show();
+                        } else {
+                            Snackbar.make(v, DetailFragment.fav.getName() + " is already Added to Favorites", Snackbar.LENGTH_LONG).show();
+                        }
                     } else {
-                        Snackbar.make(v, DetailFragment.fav.getName() + " is already Added to Favorites", Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(v, "Unexpected Error Occurred!.", Snackbar.LENGTH_LONG).show();
                     }
                 } else if (currentFragment.getId() == R.id.investmentFragment) {
                     showCryptoFormDialog();
@@ -163,21 +167,6 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(),"There was an error adding your investments.",Toast.LENGTH_LONG).show();
                         }
                     }
-
-//                    if (selectedCoin != null) {
-//                        // COIN IF USER SELECTS FROM LIST
-//                    } else {
-//                        // INSERT TOAST HERE
-//                    }
-
-                    // SAVE TO DB FOR USER TOTAL
-//                    double userTotal = quantity * buyPrice;
-//                    System.out.println(userTotal);
-
-//                    Toast.makeText(getApplicationContext(), "Buyprice: " + buyPrice + "Qnty: " + quantity + "Coin: " + selectedCoin, Toast.LENGTH_LONG).show();
-
-
-                    // SAVE TO DB HERE
                 })
                 .setNegativeButton("Cancel", (dialog, id) -> {
                     dialog.dismiss();
