@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                     ));
                     if (status){
                         Toast.makeText(getApplicationContext(),"Successfully added to your Investments.",Toast.LENGTH_LONG).show();
-                        InvestmentFragment.investmentAdapter.notifyInsert();
+                        InvestmentFragment.investmentAdapter.notifyInsert(); // this will refresh the recyclerview
                     } else {
                         Toast.makeText(getApplicationContext(),"There was an error adding your investments.",Toast.LENGTH_LONG).show();
                     }
