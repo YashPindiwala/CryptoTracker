@@ -1,9 +1,11 @@
 package com.project.app.cryptotracker.Dashboard;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.preference.PreferenceManager;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,7 +84,13 @@ public class DetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_detail, container, false);
+        // Get the saved preference
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        boolean useAltLayout = sharedPreferences.getBoolean("alternative_layout", false);
+        // which layout to use
+        int layoutId = useAltLayout ? R.layout.alt_fragment_detail : R.layout.fragment_detail;
+
+        View view =  inflater.inflate(layoutId, container, false);
         int coinId = getArguments().getInt("coinID");
         
 
@@ -93,6 +102,8 @@ public class DetailFragment extends Fragment {
         TextView tvDateAdded = view.findViewById(R.id.date_added);
         TextView tvDateLaunched = view.findViewById(R.id.date_launched);
         TextView tvCategory = view.findViewById(R.id.category);
+        LinearLayout urlsLayout = view.findViewById(R.id.urls_layout);
+
 
         // Create the CoinDetailRequest
         CoinDetailRequest coinDetailRequest = new CoinDetailRequest(getContext());
